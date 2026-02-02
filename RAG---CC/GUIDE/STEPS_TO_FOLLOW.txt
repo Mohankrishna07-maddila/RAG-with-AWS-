@@ -28,9 +28,10 @@ step-2:
 		3.give it a name and ignore all the defaults same 
 		4.click create a bucket
 		5.click on your bucket name and add your source folders and files as per your requirements
+		6.then click logout as root user and login as IAM user then pass to step 3
 
 STEP-3:
-		1.Navigate to Bedrock by searching in the console
+		1.After login as IAM user Navigate to Bedrock by searching in the console search bar
 		2.on left sidebar navigate to knowledge base
 		3.click knowledge base and click create knowledge base and then create knowledge base with vector store
 		4.create knowledge base with your friendly name and use data source as s3 
