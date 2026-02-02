@@ -1,0 +1,78 @@
+----------------------------------------STEP BY STEP GUIDE-----------------------------------------------------------------------------------------------------------------------------------------------
+FILE: STEP BY STEP GUIDE
+NOTE: BEFORE FOLLOWING THIS GUIDE MAKE SURE YOU INSTALL ALL THE PREREQUISITES MENTIONED IN THE {prerequisites.txt}
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+STEP-0:
+		1.Download Vs code first or any optional IDE 
+		2.open terminal in vs code and direct to your project folder and run venv scripts first
+		3.before that must install python 3.13.7 version other wise you will get conflict errors
+		4.also install ollama  from source https://ollama.com/download
+		5.pull the model llama3.2:1b using with command-{ollama pull llama3.2:1b}
+		6.after pulling check the status with this command-{ollama list}
+		7.after verfication the status if downloaded run this command -{ollama run llama3.2:1b}
+		8.check running instances of ollama with this command -{tasklist | findstr ollama}
+		9.if you wanna check which models are currently loaded by Ollama- {ollama ps}
+	   10.if installed then run the command -{pip install -r requirements.txt}
+	   11.after successfully installation of requirements and followed above steps you may run the app with the command -{python gradio_app.py} 
+
+STEP-1: 							
+		1.Create a AWS Account {free tier or optional}
+		2.Navigate to console search bar search for IAM 
+		3.create an IAM user with your credientials
+		4.apply the policies in the policies.png {ignore the inline policies}; apply the policies as direct apply policies
+		5.check the policies if any policy contains json as EFFECT = DENY then remove the policy or give it to chatgpt to get inline policy
+
+step-2:
+		1.click search in console and navigate to the s3
+		2.navigate to buckets and then click create a bucket
+		3.give it a name and ignore all the defaults same 
+		4.click create a bucket
+		5.click on your bucket name and add your source folders and files as per your requirements
+
+STEP-3:
+		1.Navigate to Bedrock by searching in the console
+		2.on left sidebar navigate to knowledge base
+		3.click knowledge base and click create knowledge base and then create knowledge base with vector store
+		4.create knowledge base with your friendly name and use data source as s3 
+		5.in IAM permission box click "Create and use a new service role"
+		6.click next and put data source name as your wish
+		7.browse your s3 data source in s3 uri
+		8.i choose phraser as Amazon Bedrock default parse you choose your self based on your requirement
+		9.and Chunking strategy as default 
+	   10.click emmbeding model as "Titan Text Embeddings V2  v2.0"
+	   11.click the vector store and in dropdown menu choose s3 vector store
+	   12.review everything and click on create knowledge base
+	   13.test the knowledge base using the  test
+
+step-4:
+		1.open vs-code and clone the repo and give your credientials in .env file
+		2.open terminal and type this command -{python -m venv venv}
+		3.activate the virtual env with command in powershell -{.\venv\Scripts\activate}
+		4.install the requirements mentioned in the {requirements.txt} by running command -{pip install -r requirements.txt}
+		5.after installation run "gardio.py" file in terminal as {python gardio.py}
+		6.see powershell for the commands -(.venv) PS C:\Users\maddi\OneDrive\Documents\my_projects\RAG---CC> python gradio_app.py
+											Starting Hybrid RAG app with KB_ID=XxxxxxX, REGION=ap-south-1, LOCAL_MODEL=llama3.2:1b
+											Launching Hybrid RAG Gradio App...
+											* Running on local URL:  http://127.0.0.1:7860
+											* To create a public link, set `share=True` in `launch()`.
+		7.click on the local URL : http://127.0.0.1:7860 using ctrl+right click
+		8.see the user interface part if any updates required update it and fork me i verify and accept the updates makes better and mutual gain of experience
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+**problem:
+if any problem in downloading the correct versions or facing issue with version conflicts use the zip folder of .env
+steps:
+phase-1(for zip downloaded -users):
+		1.install the zip from the google drive link- {https://drive.google.com/file/d/1Axmzias3eT5G5VbKs9RG89MtG1tXBpAR/view?usp=drive_link}
+		2.extract the file {unzip} in the file explorer and add it to your project structure 
+		3.then run command in vs code powershell -{.\venv\Scripts\activate}
+		4.then it shows (.venv) PS C:\Users\<username>\OneDrive\Documents\my_projects\RAG---CC>
+		5.check the folder .venv/Lib/site-packages, if lib folders have required libraries then only the app works in your codebase other wise it shows  the module errors to install the module
+		6.then run your app directly cause the .venv has the required libraries to run your Rag app
+		7.***make sure follow these steps in an error occured don't hestitate to pin the error in the github or else make a fork request***
+phase-2(for the cloned-users):
+		1.if you clone my project then make sure that if your code base shows the venv file apply activate script -{.\venv\Scripts\activate}
+		2.if script successfully downloads the required libraries then no need of "phase -1"
+		3.make sure that run the project if you get module err
+		ors then run the command {-python -m pip install (required libraries)}
+		4.then run the app using command -{python gradio_app.py}
+END:File 

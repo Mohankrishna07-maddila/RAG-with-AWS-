@@ -1,0 +1,28 @@
+Tech-Stack:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+															     UI
+																 |
+																 |
+														 Gradio{python library} , optional(streamlt)
+										
+										
+			
+															     AWS
+																  |
+				+-----------------------------------------------------------------------------------------------------+
+				|    													|      					  					  |
+			AWS-Bedrock											s3 bucket(source)		   							 IAM
+				|														|											  |
+				|-Knowledgebase											|- used to store our source folder			  |- Attach polices (required for the Projects)
+				|														|{which are wanted to retrive}				  |		{***mentioned in the """POLICIES.png"""}
+				|-Titan Embedding Model(used for chunking data)			|
+				|														|- s3 vector store						
+				|-attach Aws-s3 as vector store(vector store)
+				|optional( AWS-open search, FIASS)
+				
+		
+		
+																  LLM
+																   |
+																   |-Ollama 3:2:1b model optional(openai/gemini/claude-3.2-sonnet)
+																   |{best for small model and fast response of low parameters}
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------																   

@@ -1,0 +1,230 @@
+RAG USING THE AWS AND LESS CODE :
+	1. ARCHITECTURE :
+					Users
+					  ↓
+				Gradio UI (Python)
+					  ↓
+				AWS App Runner
+					  ↓
+				AWS Knowledge Base (RAG)
+						├── S3 (documents)
+						├── Titan Embeddings
+						├── OpenSearch (vector store)
+					  ↓
+				  OpenAI LLM
+				  				  
+1.What happens when a user asks a question?
+
+							User ypes question in Gradio UI
+								↓
+							App Rnner runs your Python app
+								↓
+							Pytho app:
+								↓
+							CallsAWS Knowledge Base
+								↓
+							Knowldge Base:
+								↓
+							Readsdocs from S3
+								↓
+							Uses itan Embeddings
+								↓
+							Searces OpenSearch
+								↓
+							Relevant content is sent to OpenAI
+								↓
+							Final answer comes back to user
+							
+							⚠️ You do NOT manually write:
+							
+							embedding code
+							
+							vector search
+							
+							chunking logic
+							
+							AWS does that.
+							
+****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************
+
+problem-1: 
+the above is my initial plan but i seen a issue in that architecture that iam using a aws free tier account causes the aws open search
+is not for the free tier. so i need project with free tier so i am going to use the aws s3 vector store to store the my vector embeddings so that 
+aws s3 is cheaper than the open search model 
+now the architecture turns into :
+								Users
+								   ↓
+								Gradio UI (Python)
+								   ↓
+								Backend (App Runner / EC2)
+								   ↓
+								AWS Knowledge Base
+								├── S3 (documents)
+								├── Titan Embeddings
+								└── Amazon S3 Vectors (managed)
+								   ↓
+								LLM (OpenAI or Bedrock)
+								
+****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************
+
+problem-2:
+the knowledge base is unable to create with root user so we need to use iam user 
+1** if you got errors when you logged to the IAM user:
+				so that means there is polices that you given to the iam user you login must have the code like "Effect": "Deny" remove that 
+				policy in the root user and try again now the errors will be cleared.
+
+
+	
+2** then you clear the errors if not cleared change the locations above the to us south east -1 (mumbai).
+		then the errors solved.
+
+after i solve the issue i create my knowledge base and create a s3 vector store as vector store that store the emmbedings.
+next i checked the knowledge base works correctly using the test chat in the knowledge base in "chat with your document" tab i think this is a crucial step where the text is correctly emmbeded as vector format and stored in vector s3 successfully 
+always sync your knowledge base when you add new files to the s3 {not in s3 vector in normal s3 bucket}.
+
+
+****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************
+
+
+problem-3:
+python verify_bedrock.py
+(.venv) PS C:\Users\maddi\OneDrive\Documents\my_projects\RAG---CC> python verify_bedrock.py
+Starting app with KB_ID=XO85HRTFMA, REGION=ap-south-1
+C:\Users\maddi\OneDrive\Documents\my_projects\RAG---CC\gradio_app.py:62: UserWarning: You have not s
+pecified a value for the `type` parameter. Defaulting to the 'tuples' format for chatbot messages, but this is deprecated and will be removed in a future version of Gradio. Please set type='messages' instead, which uses openai-style dictionaries with 'role' and 'content' keys.
+chatbot = gr.Chatbot(height=500)
+Testing RAG with query: 'What are the main topics in unit 3 of the cloud computing course?'
+Error calling Bedrock: An error occurred (ValidationException) when calling the RetrieveAndGenerate 
+operation: Model access is denied due to INVALID_PAYMENT_INSTRUMENT:A valid payment instrument must be provided.. Your AWS Marketplace subscription for this model cannot be completed at this time. If you recently fixed this issue, try again after 2 minutes. (Service: BedrockRuntime, Status Code: 403, Request ID: d194f635-6c29-4c54-abe7-62d9c2a6ec2b) (SDK Attempt Count: 1)                          
+--- Response from Bedrock ---
+Error: An error occurred (ValidationException) when calling the RetrieveAndGenerate operation: Model
+ access is denied due to INVALID_PAYMENT_INSTRUMENT:A valid payment instrument must be provided.. Your AWS Marketplace subscription for this model cannot be completed at this time. If you recently fixed this issue, try again after 2 minutes. (Service: BedrockRuntime, Status Code: 403, Request ID: d194f635-6c29-4c54-abe7-62d9c2a6ec2b) (SDK Attempt Count: 1)                                       
+TEST FAILED: Error detected in response.
+
+the solution of this quick fix is I have switched the LLM to Meta(LLama 3:8B iterative model).
+											so the solution for this as iam using the local llm to the generation 
+											what happening in the step is the retrive of data in kB is working good but the main problem is generation is failing
+											so for generation we use local llm ollama (llama 3)
+							⚠️ Pre-requisites:
+									Ollama MUST be running on your machine.
+									You must have the llama3 model pulled:
+									powershell
+									ollama pull llama3
+									Once verified, run your app:
+									
+									powershell
+									python coding/gradio_app.py
+									gradio_app.py
+									Open
+									The Correct Architecture (Billing-Free Generation)
+		New flow
+		AWS Knowledge Base (Retrieve ONLY)
+				↓
+		Local LLM (Generate)
+							
+							
+						AWS does:
+							
+							Vector search
+							
+							Metadata filtering
+							
+							Citations (optional)
+							
+							Your machine does:
+							
+							Answer generation
+							
+							Prompt control
+							
+							Zero cost inference
+							
+							What stays the same (important)
+							
+						You KEEP:
+							
+							Your Knowledge Base
+							
+							Your embeddings
+							
+							Your documents
+							
+							Your metadata filters
+							
+							Your retrieval logic
+							
+							You REMOVE:
+							
+							Bedrock generation
+							
+							retrieve-and-generate
+							
+****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************	
+													"""OUTPUT"""
+Final solution:	the Final responce is ---
+							(.venv) PS C:\Users\maddi\OneDrive\Documents\my_projects\RAG---CC> python gradio_app.py
+							Starting Hybrid RAG app with KB_ID=XO85HRTFMA, REGION=ap-south-1, LOCAL_MODEL=llama3.2:1b
+							C:\Users\maddi\OneDrive\Documents\my_projects\RAG---CC\gradio_app.py:135: UserWarning: You have not specified a value for the `type` parameter. Defaulting to the 'tuples' format for chatbot messages, but this is deprecated and will be removed in a future version of Gradio. Please set type='messages' instead, which uses openai-style dictionaries with 'role' and 'content' keys.
+							chatbot = gr.Chatbot(height=500)
+							Launching Hybrid RAG Gradio App...
+							* Running on local URL:  http://127.0.0.1:7860
+							* To create a public link, set `share=True` in `launch()`.
+							Retrieving context for: Economics of Cloud Computing ...
+							Retrieval took: 1.56s
+							Generating answer locally...
+							Generation took: 31.00s
+							Retrieving context for: Serverless computing;...
+							Retrieval took: 1.12s
+							Generating answer locally...
+							Generation took: 26.80s
+							Retrieving context for: Cloud interoperability and standards :...
+							Retrieval took: 1.28s
+							Generating answer locally...
+							Generation took: 38.18s
+							Retrieving context for: NIST (National Institute of Standards and Technology)...
+							Retrieval took: 2.47s
+							Generating answer locally...
+							Generation took: 26.44s
+							Retrieving context for: -Common Cloud Security Standards...
+							Retrieval took: 1.49s
+							Generating answer locally...
+							Generation took: 21.30s
+							Retrieving context for: Common Cloud Security Standards...
+							Retrieval took: 0.70s
+							Generating answer locally...
+							Generation took: 13.42s
+				
+After using the Local LLM(Ollama 3:2b) makes a response better but there is a drawback in latency but iam satisfied with that time {>60 sec}
+the retrieving of the chucks is fast... 
+clear steps ---->
+				 1. when a user hit a request in the gradio ui then the request is directly call to the knowledge Base 
+														|- text is converted into vector emmbedings
+				 2. the knowledge Base do three steps --+
+														|- calls the metadata for chuck id (Fast Retrival)
+														|- using chunk id search the chunks in the vector store 
+														|- retrieve the data from the vector store and send it local LLM 
+				3. the local LLM gives the raw formated data into formated context which is meaningful 
+														|- the local LLM we used Ollama 3:2B a small llm best for my cpu and ram convert the raw text into meaningful context
+														|	and send it ui gradio to display and also it retrives citation report (where the source data comes from which document)
+														|
+														|-I retrieved the citation data using the location field provided in the AWS Bedrock retrieve API response.
+
+															When client.retrieve() is called, it returns a list of matching chunks (retrievalResults). Each chunk contains metadata about its source.
+															|
+															Here is the logic I implemented in 
+															gradio_app.py:
+																		|             # Extract source (S3 URI)
+																						location = res.get('location', {})
+																						
+																						# Check if the source is an S3 file
+																						if location.get('type') == 'S3':
+																							# Get the URI (e.g., s3://my-bucket/docs/unit-3.pdf)
+																							uri = location.get('s3Location', {}).get('uri', '')
+																							
+																							if uri:
+																								# Split string to get just the filename (unit-3.pdf)
+																								filename = uri.split('/')[-1]
+																								sources.add(filename)
+
+
+																								

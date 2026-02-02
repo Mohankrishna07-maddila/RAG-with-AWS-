@@ -1,0 +1,310 @@
+🔹 STEP-1 — Create S3 Bucket (Data Layer)
+					Why?
+						
+						This is where your knowledge documents live.
+						
+					Steps
+						
+						Go to S3 → Create bucket
+						
+						Name it:
+						
+							rag-knowledge-docx
+						
+						Upload simple files:
+							inside that i uploaded the folder "/source" contains:
+																			1. unit- 3 cloud computing 
+																			2. unit- 4 cloud computing 
+																			3. unit- 5 cloud computing 
+						s3 structure now :
+										 bucket/rag-knowledge-docx/source/uploaded-files
+						
+						
+						
+🔹 STEP-2 — Create AWS Knowledge Base (CORE OF RAG)
+						Why?
+						
+						This is the brain of your RAG system.
+						
+						Steps (Console only – no code)
+						
+							Go to Amazon Bedrock → Knowledge Bases
+							
+							Click Create knowledge base
+							
+							Choose:
+							
+									Data source: S3
+	
+							Bucket: rag-knowledge-docx
+							
+							Embedding model:
+							
+									Amazon Titan Embeddings
+							
+							Vector store:
+							
+									Amazon OpenSearch (managed)
+							
+							IAM role:
+							
+									Let AWS create one
+							
+							Finish setup
+							
+							Click Sync data source
+						
+							⏳ Wait until status = READY
+✅ If this is not READY, STOP. Nothing else will work.
+
+the amazon open search is not for free tier so i replace my vector store from Amazon OpenSearch to s3 Vector store now the flow is like :
+								User
+								  ↓
+								Your App (Python)<-----|
+								  ↓                    |
+								AWS Knowledge Base     |
+								├── S3 documents       |(Response)
+								├── Titan Embeddings   |
+								└── S3 Vectors         | 
+      								  ↓                |
+									LLM(Meta 3)-->-----|
+
+
+the knowledge base is working correctly but the LLM of the bedrock Meta 3 is not generate the text(data) so iam changing the LLM with my local LLM ollama 
+so that it is free for the usage and no billing charges are applied 
+now the structure is all same but llm is changed
+									User
+									  ↓
+								Gradio UI(Python)<-----|
+								      ↓                |
+								AWS Knowledge Base     |
+								├── S3 documents       |(Response)
+								├── Titan Embeddings   |
+								└── S3 Vectors         | 
+      								  ↓                |
+									LLM(Ollama 3)-->---|
+
+The Correct Architecture (Billing-Free Generation)
+what AWS does in the flow =>
+						   +----------------------------------------------------+
+						   | New flow							 				|
+						   | AWS Knowledge Base (Retrieve ONLY) 				| 
+						   |		↓											|
+						   | Local LLM (Generate)							 	|
+						   |													|
+						   | AWS does:							 				|
+						   |							 						|
+						   | 			Vector search							|
+						   |													|
+						   | 			Metadata filtering						|
+						   |							 						|						
+						   | 			Citations (optional)					|
+						   |													|
+						   | Your machine does:							 		|
+						   |													|
+						   | 				Answer generation					|
+						   | 													|
+						   |			 	Prompt control						|
+						   | 													|
+						   | 				Zero cost inference					|
+						   | 													|
+						   | What stays the same (important)					|
+						   | 													|
+						   | You KEEP:							 				|
+						   | 													|
+						   | 			Your Knowledge Base						|
+						   | 													|
+						   | 			Your embeddings							|
+						   | 													|
+						   | 			Your documents							|
+						   | 													|
+						   | 			Your metadata filters					|
+						   | 													|
+						   | 			Your retrieval logic					|
+						   | 													|
+						   | 			You REMOVE:							 	|
+						   | 													|
+						   | 			Bedrock generation					 	|
+						   | 												 	| 
+						   | 			retrieve-and-generate				 	|
+						   +----------------------------------------------------+
+						   
+Step-by-Step Implementation
+	STEP 1 — Use Retrieve ONLY API (no billing trigger)
+				
+			Instead of:
+				
+				bedrock-agent-runtime retrieve-and-generate
+				
+				
+			Use:
+				
+				bedrock-agent-runtime retrieve
+				
+				
+				This does NOT invoke any LLM.
+				
+			Example:
+				
+				aws bedrock-agent-runtime retrieve \
+				--knowledge-base-id kb-xxxxxxx \
+				--retrieval-query '{"text":"What is the policy coverage?"}' \
+				--region us-east-1
+				
+				
+			Output:
+				
+				Retrieved chunks
+				
+				Source documents
+				
+				Metadata
+				
+				✅ No billing
+				✅ No payment check
+				
+	STEP 2 — Build the prompt yourself
+				
+			You now manually construct the prompt:
+				
+				You are an assistant answering questions using the following context.
+				
+			Context:
+				<Document chunk 1>
+				<Document chunk 2>
+				<Document chunk 3>
+				
+			Question:
+				What is the policy coverage?
+				
+			Answer:
+				
+				
+				This is exactly what Bedrock was doing internally.
+				
+	STEP 3 — Use a Local LLM (Ollama is easiest)
+				Recommended local stack
+				
+				Ollama
+				
+				LLaMA 3 / Mistral / Phi-3
+				
+			Example:
+				
+				ollama pull llama3
+				ollama run llama3
+				
+				
+			Python example:
+				
+				import ollama
+				
+				response = ollama.chat(
+					model="llama3",
+					messages=[
+						{"role": "user", "content": prompt}
+					]
+				)
+				
+				print(response["message"]["content"])
+				
+				
+✅ Zero AWS billing
+✅ Fully offline generation
+✅ Same RAG quality (often better)	
+
+steps to achive the implementation plan:
+		STEP 1 — Stop using retrieve-and-generate
+
+				This is non-negotiable.
+
+			❌ DO NOT call:
+
+				bedrock-agent-runtime retrieve-and-generate
+
+
+				It always triggers billing.
+
+		STEP 2 — Use Retrieve ONLY from Bedrock
+			CLI sanity test (once)
+					aws bedrock-agent-runtime retrieve \
+					--knowledge-base-id kb-XXXXXXX \
+					--retrieval-query '{"text":"What does this document say?"}' \
+					--region us-east-1
+
+			What you should see
+
+						Retrieved text chunks
+
+						Metadata
+
+						Source document IDs
+
+			If this works → retrieval is solved forever.
+
+		STEP 3 — Extract text chunks (important)
+
+				From the response, you care about:
+
+				retrievalResults[].content.text
+
+				That text is your context.
+
+		STEP 4 — Build the prompt manually (this replaces Bedrock magic)
+
+				Example prompt (simple + correct):
+
+					You are an assistant answering questions strictly from the given context.
+
+				Context:
+						<chunk 1>
+						<chunk 2>
+						<chunk 3>
+
+			Question:
+					What is the policy coverage?
+
+			Answer:
+
+
+					This is exactly what Bedrock was doing internally.
+
+		STEP 5 — Send the prompt to your local LLaMA-3 (Ollama)
+				Python example (clean & minimal)
+				import ollama
+
+			prompt = """
+						You are an assistant answering questions strictly from the given context.
+
+			Context:
+					<chunk 1>
+					<chunk 2>
+
+			Question:
+					What is the policy coverage?
+
+			Answer:
+					"""
+						response = ollama.chat(
+						model="llama3",messages=[{"role": "user", "content": prompt}])
+
+						print(response["message"]["content"])
+
+
+"""That’s it, No AWS billing. No API key. No limits."""
+
+		STEP 6 — Optional: Add citations (manual but easy)
+
+				You already get:
+
+						documentId
+
+						sourceUri
+
+						chunk text
+
+						Just append:
+
+									Sources:
+											- Document A
+											- Document B

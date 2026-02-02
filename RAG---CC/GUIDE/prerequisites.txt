@@ -1,0 +1,57 @@
+FILE: prerequisites.txt
+
+			1. AWS ACCOUNT & ACCESS
+						- Active AWS account (IAM user, NOT root)
+						- AWS CLI installed and configured
+						- Proper IAM permissions for:
+						- Amazon Bedrock
+						- Bedrock Knowledge Bases
+						- S3
+						- IAM Role PassRole
+						- Region where Bedrock Knowledge Bases are supported
+						
+			2. AWS BEDROCK SETUP
+						- Bedrock model access enabled (embedding model + KB-compatible model)
+						- Bedrock Knowledge Base created
+						- Vector store configured (managed or OpenSearch)
+						- Data source connected (S3)
+						- Documents ingested and indexed successfully
+						
+			3. S3 DATA REQUIREMENTS
+						- S3 bucket created
+						- Documents in supported formats (txt, pdf, md, etc.)
+						- Clean, chunkable text (no scanned-only PDFs)
+						- Proper folder structure if metadata filtering is used
+						
+			4. LOCAL ENVIRONMENT
+						- Python 3.13.7+
+						- Virtual environment (recommended)
+						- OS: Windows / Linux / macOS
+						- venv from google drive link-{}
+			5. PYTHON DEPENDENCIES
+						- boto3
+						- gradio
+						- requests
+						- python-dotenv (optional)
+						- ollama client (or HTTP calls)
+						
+			6. OLLAMA SETUP
+						- Ollama installed and running locally
+						- LLM pulled (e.g., llama3.x)
+						- Sufficient RAM/CPU for inference
+						- Ollama API reachable (http://localhost:11434)
+						
+			7. APPLICATION LOGIC
+						- Hybrid RAG flow implemented:
+						- Retrieval → Bedrock
+						- Generation → Ollama
+						- Prompt template enforcing context usage
+						- Citation extraction from Bedrock response
+						- Error handling for empty retrievals
+						
+			8. NETWORK & SECURITY
+						- Internet access for AWS calls
+						- Local firewall allowing Ollama port
+						- AWS credentials secured (env vars or config files)
+						
+END OF FILE
