@@ -158,9 +158,45 @@ the solution of this quick fix is I have switched the LLM to Meta(LLama 3:8B ite
 							Bedrock generation
 							
 							retrieve-and-generate
-							
+****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************
+problem-4:
+		  python gradio_app.py
+			PS C:\Users\maddi\OneDrive\Documents\my_projects\rag ---cc\RAG---CC> python gradio_app.py
+			Starting Hybrid RAG app with KB_ID=XO85HRTFMA, REGION=ap-south-1, LOCAL_MODEL=llama3.2:1b
+			C:\Users\maddi\OneDrive\Documents\my_projects\rag ---cc\RAG---CC\gradio_app.py:126: UserWarning: The p
+			arameters have been moved from the Blocks constructor to the launch() method in Gradio 6.0: theme, css. Please pass these parameters to launch() instead.                                                     with gr.Blocks(theme=gr.themes.Soft(primary_hue="purple"), css=custom_css, title="Hybrid RAG Assista
+			nt") as demo:                                                                                         Traceback (most recent call last):
+			File "C:\Users\maddi\OneDrive\Documents\my_projects\rag ---cc\RAG---CC\gradio_app.py", line 132, in 
+			<module>                                                                                                  chatbot = gr.Chatbot(height=600, type="messages")
+			File "C:\Users\maddi\AppData\Local\Programs\Python\Python313\Lib\site-packages\gradio\component_meta
+			.py", line 194, in wrapper                                                                                return fn(self, **kwargs)
+			TypeError: Chatbot.__init__() got an unexpected keyword argument 'type'
+Solution :
+						Fixing Gradio Chatbot Error
+									I updated 
+									gradio_app.py to be compatible with Gradio 6.x by:
+									Removing the deprecated type="messages" argument from gr.Chatbot.
+									Moving theme and css definitions from gr.Blocks to demo.launch(). I'm now ready to verify if the app launches correctly.
+									Background Steps
+									…\RAG---CC > python gradio_app.py
+									Progress Updates
+									1-Reading the gradio_app.py file to understand the Chatbot implementation
+									
+									2-Updating gradio_app.py to fix Chatbot initialization and Gradio 6.x migration warnings
+									
+									3-Verifying the fix by attempting to run the Gradio app
+							ASSISTANT:	
+									I've fixed the Gradio error for you!
+
+									The issue was that you are using Gradio 6.x, which changed how the Chatbot component and Blocks are initialized:
+
+									Removed the type="messages" argument from gr.Chatbot (the "messages" format is now the default).
+									Moved theme and css from gr.Blocks() to demo.launch() to satisfy the new Gradio 6.0 requirements.
+									The application is now launching successfully. You should be able to access it at http://127.0.0.1:7860.
+
+I've started the server for you in the background. If you need to stop it or see more logs, you can do so in your terminal.									
 ****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************	
-													"""OUTPUT"""
+														"""OUTPUT"""
 Final solution:	the Final responce is ---
 							(.venv) PS C:\Users\maddi\OneDrive\Documents\my_projects\RAG---CC> python gradio_app.py
 							Starting Hybrid RAG app with KB_ID=XO85HRTFMA, REGION=ap-south-1, LOCAL_MODEL=llama3.2:1b

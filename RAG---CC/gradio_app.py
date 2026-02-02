@@ -123,13 +123,13 @@ custom_css = """
 """
 
 # UI
-with gr.Blocks(theme=gr.themes.Soft(primary_hue="purple"), css=custom_css, title="Hybrid RAG Assistant") as demo:
+with gr.Blocks(title="Hybrid RAG Assistant") as demo:
     gr.Markdown("# 🚀 Hybrid RAG: AWS Bedrock + Local Ollama")
     
     with gr.Row():
         # Left Column: Chat Interface
         with gr.Column(scale=3):
-            chatbot = gr.Chatbot(height=600, type="messages")
+            chatbot = gr.Chatbot(height=600)
             msg = gr.Textbox(placeholder="Ask about your documents...", label="Question")
             clear = gr.Button("Clear")
 
@@ -232,4 +232,10 @@ with gr.Blocks(theme=gr.themes.Soft(primary_hue="purple"), css=custom_css, title
 
 if __name__ == "__main__":
     print("Launching Hybrid RAG Gradio App...")
-    demo.launch(server_name="127.0.0.1", server_port=7860, share=False)
+    demo.launch(
+        server_name="127.0.0.1", 
+        server_port=7860, 
+        share=False,
+        theme=gr.themes.Soft(primary_hue="purple"),
+        css=custom_css
+    )
