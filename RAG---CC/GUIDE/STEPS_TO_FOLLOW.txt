@@ -1,6 +1,6 @@
 ----------------------------------------STEP BY STEP GUIDE-----------------------------------------------------------------------------------------------------------------------------------------------
 FILE: STEP BY STEP GUIDE
-NOTE: BEFORE FOLLOWING THIS GUIDE MAKE SURE YOU INSTALL ALL THE PREREQUISITES MENTIONED IN THE {prerequisites.txt}
+NOTE: ***BEFORE FOLLOWING THIS GUIDE MAKE SURE YOU INSTALL ALL THE PREREQUISITES MENTIONED IN THE {prerequisites.txt}***
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 STEP-0:
 		1.Download Vs code first or any optional IDE 
