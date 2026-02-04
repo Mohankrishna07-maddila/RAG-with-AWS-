@@ -58,14 +58,14 @@ step-4:
 	   10.And type the command to pull the required model {ollama pull llama3.2:1b} to pull the specific model for usage
 	   11.open another Command prompt and type this command for check the Ollama models are Installed in system {ollama list}
 	   12.after pulling the model use the command to run the model {ollama run llama3.2:1b}
-	   13.run this command {ollama ps} to check Which Ollama models are currently loaded in memory and running.
-		6.see powershell for the commands -(.venv) PS C:\Users\maddi\OneDrive\Documents\my_projects\RAG---CC> python gradio_app.py
+	   13.run this command {ollama ps} to check Which Ollama models are currently loaded in memory and running. this will show when a model is in use only not every time but just shows the parameters.
+	   14.see powershell for the commands -(.venv) PS C:\Users\maddi\OneDrive\Documents\my_projects\RAG---CC> python gradio_app.py
 											Starting Hybrid RAG app with KB_ID=XxxxxxX, REGION=ap-south-1, LOCAL_MODEL=llama3.2:1b
 											Launching Hybrid RAG Gradio App...
 											* Running on local URL:  http://127.0.0.1:7860
 											* To create a public link, set `share=True` in `launch()`.
-		7.click on the local URL : http://127.0.0.1:7860 using ctrl+right click
-		8.see the user interface part if any updates required update it and fork me i verify and accept the updates makes better and mutual gain of experience
+	   15.click on the local URL : http://127.0.0.1:7860 using ctrl+right click
+	   16.see the user interface part if any updates required update it and fork me i verify and accept the updates makes better and mutual gain of experience
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 **problem:
 if any problem in downloading the correct versions or facing issue with version conflicts use the zip folder of .env
