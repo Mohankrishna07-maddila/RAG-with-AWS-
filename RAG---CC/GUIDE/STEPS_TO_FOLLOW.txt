@@ -51,6 +51,14 @@ step-4:
 		3.activate the virtual env with command in powershell -{.\venv\Scripts\activate}
 		4.install the requirements mentioned in the {requirements.txt} by running command -{pip install -r requirements.txt}
 		5.after installation run "gradio_app.py" file in terminal as {python gradio_app.py}
+		6.download the Ollama from the official Ollama link {https://ollama.com/}
+		7.open file explorer and then Downloads then see for ollama or Ollamasetup.exe 
+		8.then click on the Ollama and install it to your system 
+		9.after installation close Ollama application and press windows button and type cmd and open the command prompt.
+	   10.And type the command to pull the required model {ollama pull llama3.2:1b} to pull the specific model for usage
+	   11.open another Command prompt and type this command for check the Ollama models are Installed in system {ollama list}
+	   12.after pulling the model use the command to run the model {ollama run llama3.2:1b}
+	   13.run this command {ollama ps} to check Which Ollama models are currently loaded in memory and running.
 		6.see powershell for the commands -(.venv) PS C:\Users\maddi\OneDrive\Documents\my_projects\RAG---CC> python gradio_app.py
 											Starting Hybrid RAG app with KB_ID=XxxxxxX, REGION=ap-south-1, LOCAL_MODEL=llama3.2:1b
 											Launching Hybrid RAG Gradio App...
