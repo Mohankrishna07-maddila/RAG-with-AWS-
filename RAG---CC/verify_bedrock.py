@@ -1,4 +1,4 @@
-from gradio_app import ask_kb
+from gradio_app import ask_hybrid_rag
 import sys
 
 # Test query
@@ -7,7 +7,7 @@ query = "What are the main topics in unit 3 of the cloud computing course?"
 print(f"Testing RAG with query: '{query}'")
 
 try:
-    response = ask_kb(query, [])
+    response, context, sources = ask_hybrid_rag(query)
     print("\n--- Response from Bedrock ---")
     print(response)
     print("-----------------------------")

@@ -1,0 +1,10 @@
+The main topics in Unit 3 of the cloud computing course are:
+
+1. Serverless computing
+2. Containerization (Docker and Kubernetes)
+3. Edge computing
+4. Hybrid and multi-cloud strategies
+5. Cloud-centric IoT architecture
+6. Commercial IoT
+
+These topics cover advanced concepts in cloud computing, including serverless computing, containerization, edge computing, hybrid and multi-cloud strategies, cloud-centric IoT architecture, and commercial IoT.

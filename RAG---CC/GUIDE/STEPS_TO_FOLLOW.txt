@@ -50,7 +50,7 @@ step-4:
 		2.open terminal and type this command -{python -m venv venv}
 		3.activate the virtual env with command in powershell -{.\venv\Scripts\activate}
 		4.install the requirements mentioned in the {requirements.txt} by running command -{pip install -r requirements.txt}
-		5.after installation run "gardio.py" file in terminal as {python gardio.py}
+		5.after installation run "gradio_app.py" file in terminal as {python gradio_app.py}
 		6.see powershell for the commands -(.venv) PS C:\Users\maddi\OneDrive\Documents\my_projects\RAG---CC> python gradio_app.py
 											Starting Hybrid RAG app with KB_ID=XxxxxxX, REGION=ap-south-1, LOCAL_MODEL=llama3.2:1b
 											Launching Hybrid RAG Gradio App...

@@ -19,7 +19,7 @@ try:
         print("PASS: Sources extracted.")
 
     # 2. Test full flow
-    answer = ask_hybrid_rag(query, [])
+    answer, context, sources = ask_hybrid_rag(query)
     print("\n--- Final Answer ---")
     print(answer)
     print("--------------------")
