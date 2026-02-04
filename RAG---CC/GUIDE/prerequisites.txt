@@ -37,7 +37,7 @@ FILE: prerequisites.txt
 						
 			6. OLLAMA SETUP
 						- Ollama installed and running locally
-						- LLM pulled (e.g., llama3.x)
+						- LLM pulled (e.g., llama3.2:1b)
 						- Sufficient RAM/CPU for inference
 						- Ollama API reachable (http://localhost:11434)
 						
